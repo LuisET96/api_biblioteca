@@ -20,7 +20,14 @@ class Libros extends REST_Controller {
     }
 
 		public function libros_get(){
-		  $arr = $this->Modelo->query("SELECT * FROM libro");
+		  $arr = $this->Modelo->query("SELECT * FROM libros");
+			$this->response($arr);
+		}
+
+		public function libro_materia_get(){
+			$categorias = $this->input->get("materia");
+
+			$arr = $this->Modelo->query("SELECT libros.* FROM categorias JOIN libros_has_categorias ON (libros_has_categorias.categoria_id = categorias.id_categoria) JOIN libros ON (libros_has_categorias.libro_id = libros.id_libro) WHERE categorias.nombre = ?", $categorias);
 			$this->response($arr);
 		}
 }
