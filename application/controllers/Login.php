@@ -2,9 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login extends CI_Controller{
-	parent::__construct();
 
-	function __construct(argument){
+	function __construct(){
+		parent::__construct();
+
 		$this->load->database();
 		$this->load->model("Modelo");
 
@@ -35,15 +36,19 @@ class Login extends CI_Controller{
 	}
 
 	public function entrar(){
+		$resultado["resultado"] = false;
 	  if($this->input->post("email") && $this->input->post("contrasena")){
 			$email = $this->input->post("email");
-			$pass = $this->input->post("contrasena");
+			$pass = sha1($this->input->post("contrasena"));
 
-			$res = $this->Modelo->query("SELECT * FROM usuarios WHERE correo = ? AND password = ?", $email, $password);
+			$res = $this->Modelo->query("SELECT * FROM usuarios WHERE correo = '$email' AND password = '$pass'");
 			if (count($res) > 0) {
+				$resultado["resultado"] = true;
 				$this->crear_sesion($res[0]->id_usuario);
 			}
 		}
+
+		echo json_encode($resultado);
 	}
 
 	public function crear_sesion($id){
@@ -54,6 +59,12 @@ class Login extends CI_Controller{
 			"correo" => $userdata[0]->correo
 		);
 		$this->session->set_userdata($session_data);
+
+		echo var_dump($this->session->userdata());
+	}
+
+	public function salir(){
+	  $this->session->set_userdata(array());
 	}
 }
 
