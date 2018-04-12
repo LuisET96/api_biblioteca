@@ -55,6 +55,7 @@ class Login extends CI_Controller{
 		$userdata = $this->Modelo->query("SELECT * FROM usuarios WHERE id_usuario = ?", $id);
 
 	  $session_data = array(
+			"id" => $userdata[0]->id,
 			"nombre" => $userdata[0]->nombre,
 			"correo" => $userdata[0]->correo
 		);
@@ -65,6 +66,10 @@ class Login extends CI_Controller{
 
 	public function salir(){
 	  $this->session->set_userdata(array());
+	}
+
+	public function getSessionVariable(){
+	  return json_encode($this->session->userdata());
 	}
 }
 
