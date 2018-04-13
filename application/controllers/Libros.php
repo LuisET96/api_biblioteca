@@ -30,4 +30,15 @@ class Libros extends REST_Controller {
 			$arr = $this->Modelo->query("SELECT libros.* FROM categorias JOIN libros_has_categorias ON (libros_has_categorias.categoria_id = categorias.id_categoria) JOIN libros ON (libros_has_categorias.libro_id = libros.id_libro) WHERE categorias.nombre = ?", $categorias);
 			$this->response($arr);
 		}
+
+		public function libro_get(){
+		  $id_libro = $this->input->get("id_libro");
+
+			$res = $this->Modelo->query("SELECT * FROM libros WHERE id_libro = ?", $id_libro);
+			if (count($res) > 0) {
+				$this->response($res[0]);
+			} else {
+				$this->response("No se ha encontrado libro.");
+			}
+		}
 }
