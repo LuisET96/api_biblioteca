@@ -21,15 +21,18 @@ class Login extends CI_Controller{
 			$email = $this->input->post("email");
 			$pass = $this->input->post("contrasena");
 
-			$this->Modelo->agregar_reg("usuarios", array(
-				"nombre" => $name,
-				"correo" => $email,
-				"password" => sha1($pass)
-			));
+			$usuario = $this->Modelo->query("SELECT * FROM usuarios WHERE correo = ?", $email);
+			if (count($usuario) == 0) {
+				$this->Modelo->agregar_reg("usuarios", array(
+					"nombre" => $name,
+					"correo" => $email,
+					"password" => sha1($pass)
+				));
 
-			$id_usuario = $this->db->insert_id();
-			$this->crear_sesion($id_usuario);
-			$resultado["resultado"] = true;
+				$id_usuario = $this->db->insert_id();
+				$this->crear_sesion($id_usuario);
+				$resultado["resultado"] = true;
+			}
 		}
 
 		echo json_encode($resultado);
@@ -55,7 +58,7 @@ class Login extends CI_Controller{
 		$userdata = $this->Modelo->query("SELECT * FROM usuarios WHERE id_usuario = ?", $id);
 
 	  $session_data = array(
-			"id" => $userdata[0]->id,
+			// "id" => $userdata[0]->id,
 			"nombre" => $userdata[0]->nombre,
 			"correo" => $userdata[0]->correo
 		);
