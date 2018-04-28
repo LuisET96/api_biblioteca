@@ -75,5 +75,3 @@ class Login extends CI_Controller{
 	  return json_encode($this->session->userdata());
 	}
 }
-
-?>

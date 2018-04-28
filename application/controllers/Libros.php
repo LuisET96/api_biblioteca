@@ -41,16 +41,24 @@ class Libros extends REST_Controller {
 			}
 		}
 
-		public function categorias_get(){
+		public function categorias_libros_get(){
 			$arr_categorias = [];
-			$categorias = $this->Modelo->query("SELECT * FROM categorias");
+			$id_categoria = $this->input->get("id_categoria");
+
+			$categorias = $this->Modelo->query("SELECT * FROM categorias WHERE id_categoria = ?", $id_categoria);
 
 			if (count($categorias) > 0) {
 			  foreach ($categorias as $categoria) {
-					$arr_categorias[$categoria->nombre] = $this->libro_categoria($categoria->nombre);
+					$arr_categorias["categoria"] = $this->libro_categoria($categoria->nombre);
 			  }
 			}
 
 			$this->response($arr_categorias);
+		}
+
+		public function categorias_get(){
+			$arr_categorias = [];
+			$categorias = $this->Modelo->query("SELECT * FROM categorias");
+			$this->response($categorias);
 		}
 }
