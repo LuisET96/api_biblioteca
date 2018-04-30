@@ -61,4 +61,12 @@ class Libros extends REST_Controller {
 			$categorias = $this->Modelo->query("SELECT * FROM categorias");
 			$this->response($categorias);
 		}
+
+		public function libro_imagen_get(){
+		  $id_libro = $this->input->get("id_libro");
+
+			$libros = $this->Modelo->query("SELECT * FROM libros WHERE id_libro = ?", $id_libro);
+
+			header('Location: '.base_url($libros[0]->rutaImagen));
+		}
 }
